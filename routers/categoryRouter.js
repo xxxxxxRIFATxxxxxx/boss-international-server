@@ -1,31 +1,39 @@
 // Dependencies
 const express = require('express');
+const checkAdminHandler = require('../middlewares/checkAdminHandler');
 const Category = require('../models/Category');
 
 // Initialize
 const categoryRouter = express.Router();
 
-// Get All Categories
+// Get All
 categoryRouter.get('/', async (req, res) => {
-    try {
-        const data = await Category.find({});
-        res.status(200);
-        res.send({
-            result: data,
-            message: "Success"
-        });
+    let data;
+
+    if (req?.query?.title) {
+        data = await Category.find({ title: req?.query?.title }).sort("-date");
+    }
+  
+    else {
+        data = await (await Category.find({}).sort("-date")).reverse();
     }
 
-    catch (error) {
-        res.status(error.status || 500);
-        res.send({
-            error: error.message
-        });
-    };
+  try {
+    res.status(200);
+    res.send({
+      result: data,
+      message: "Success",
+    });
+  } catch (error) {
+    res.status(error.status || 500);
+    res.send({
+      error: error.message,
+    });
+  }
 });
 
-// Create Category
-categoryRouter.post('/', async (req, res) => {
+// Create
+categoryRouter.post('/', checkAdminHandler, async (req, res) => {
      // Submit To Database
      try {
         const data = await newCategory.save();
@@ -44,8 +52,8 @@ categoryRouter.post('/', async (req, res) => {
     };
 });
 
-// Update Category
-categoryRouter.put('/:id', async (req, res) => {
+// Update
+categoryRouter.put('/:id', checkAdminHandler, async (req, res) => {
     const id = req.params.id;
 
     // Submit To Database
@@ -66,8 +74,8 @@ categoryRouter.put('/:id', async (req, res) => {
     };
 });
 
-// Delete Category
-categoryRouter.delete('/:id', async (req, res) => {
+// Delete
+categoryRouter.delete('/:id', checkAdminHandler, async (req, res) => {
     const id = req.params.id;
 
     // Submit To Database
@@ -88,7 +96,7 @@ categoryRouter.delete('/:id', async (req, res) => {
     };
 });
 
-// Single Category
+// Single
 categoryRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
 

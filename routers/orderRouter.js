@@ -1,29 +1,21 @@
 // Dependencies
 const express = require("express");
-const checkAdminHandler = require("../middlewares/checkAdminHandler");
-const Product = require("../models/Product");
+const checkLoginHandler = require("../middlewares/checkLoginHandler");
+const Order = require("../models/Order");
 
 // Initialize
-const productRouter = express.Router();
+const orderRouter = express.Router();
 
 // Get All
-productRouter.get("/", async (req, res) => {
+orderRouter.get("/", async (req, res) => {
   let data;
 
   if (req?.query?.limit) {
-    data = await Product.find({}).sort("-date").limit(process.env.LIMIT);
+    data = await Order.find({}).sort("-date").limit(process.env.LIMIT);
   } 
   
-  else if (req?.query?.category) {
-    data = await Product.find({ category: req?.query?.category }).sort("-date");
-  }
-
-  else if (req?.query?.title) {
-    data = await Product.find({ title: req?.query?.title }).sort("-date");
-  }
-  
   else {
-    data = await (await Product.find({}).sort("-date")).reverse();
+    data = await (await Order.find({}).sort("-date")).reverse();
   }
 
   try {
@@ -41,12 +33,12 @@ productRouter.get("/", async (req, res) => {
 });
 
 // Create
-productRouter.post("/", checkAdminHandler, async (req, res) => {
-  const newProduct = new Product(req.body);
+orderRouter.post("/", checkLoginHandler, async (req, res) => {
+  const newOrder = new Order(req.body);
 
     // Submit To Database
     try {
-      const data = await newProduct.save();
+      const data = await newOrder.save();
       res.status(200);
       res.send({
         result: data,
@@ -61,12 +53,12 @@ productRouter.post("/", checkAdminHandler, async (req, res) => {
 });
 
 // Update
-productRouter.put("/:id", checkAdminHandler, async (req, res) => {
+orderRouter.put("/:id", checkAdminHandler, async (req, res) => {
   const id = req.params.id;
 
     // Submit To Database
     try {
-      const data = await Product.findByIdAndUpdate(id, req.body);
+      const data = await Order.findByIdAndUpdate(id, req.body);
       res.status(200);
       res.send({
         result: data,
@@ -81,12 +73,12 @@ productRouter.put("/:id", checkAdminHandler, async (req, res) => {
 });
 
 // Delete
-productRouter.delete("/:id", checkAdminHandler, async (req, res) => {
+orderRouter.delete("/:id", checkAdminHandler, async (req, res) => {
   const id = req.params.id;
 
     // Submit To Database
     try {
-      const data = await Product.findByIdAndRemove(id);
+      const data = await Order.findByIdAndRemove(id);
       res.status(200);
       res.send({
         result: data,
@@ -101,12 +93,12 @@ productRouter.delete("/:id", checkAdminHandler, async (req, res) => {
 });
 
 // Single
-productRouter.get("/:id", async (req, res) => {
+orderRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
 
   // Submit To Database
   try {
-    const data = await Product.findById(id).exec();
+    const data = await Order.findById(id).exec();
     res.status(200);
     res.send({
       result: data,
@@ -121,4 +113,4 @@ productRouter.get("/:id", async (req, res) => {
 });
 
 // Export
-module.exports = productRouter;
+module.exports = orderRouter;
