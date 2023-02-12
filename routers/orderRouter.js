@@ -1,5 +1,6 @@
 // Dependencies
 const express = require("express");
+const checkAdminHandler = require("../middlewares/checkAdminHandler");
 const checkLoginHandler = require("../middlewares/checkLoginHandler");
 const Order = require("../models/Order");
 
