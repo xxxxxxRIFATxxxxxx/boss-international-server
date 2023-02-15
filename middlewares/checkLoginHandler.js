@@ -1,13 +1,14 @@
 // dependencies
+var jwt = require("jsonwebtoken");
 
 // function Definition
 const checkLoginHandler = (req, res, next) => {
-    const {authorization} = req.headers;
+    const { authorization } = req.headers;
 
     try {
         const token = authorization.split(" ")[1];
         const decode = jwt.verify(token, process.env.JWT_SECRET);
-        const {userId, firstName, lastName, email, phone, role} = decode;
+        const { userId, firstName, lastName, email, phone, role } = decode;
 
         req.userId = userId;
         req.firstName = firstName;
@@ -17,10 +18,9 @@ const checkLoginHandler = (req, res, next) => {
         req.role = role;
 
         next();
-        
     } catch (error) {
         next("Authentication failure!");
-    };
+    }
 };
 
 // export
