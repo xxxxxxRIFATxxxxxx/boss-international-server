@@ -23,7 +23,6 @@ const checkAdminHandler = (req, res, next) => {
             next("Unauthorized!");
         }
     } catch (error) {
-        console.log(error);
         next("Unauthorized!");
     }
 };
