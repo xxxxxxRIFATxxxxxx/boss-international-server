@@ -1,4 +1,5 @@
 // dependencies
+var jwt = require("jsonwebtoken");
 
 // function Definition
 const checkAdminHandler = (req, res, next) => {
@@ -16,14 +17,13 @@ const checkAdminHandler = (req, res, next) => {
         req.phone = phone;
         req.role = role;
 
-        console.log(role);
-
         if (role === "admin") {
             next();
         } else {
             next("Unauthorized!");
         }
     } catch (error) {
+        console.log(error);
         next("Unauthorized!");
     }
 };
