@@ -36,7 +36,6 @@ orderRouter.get("/", async (req, res) => {
 // Create
 orderRouter.post("/", checkLoginHandler, async (req, res) => {
   const newOrder = new Order(req.body);
-
     // Submit To Database
     try {
       const data = await newOrder.save();

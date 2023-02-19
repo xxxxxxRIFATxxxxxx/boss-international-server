@@ -34,6 +34,8 @@ categoryRouter.get('/', async (req, res) => {
 
 // Create
 categoryRouter.post('/', checkAdminHandler, async (req, res) => {
+    const newCategory = new Category(req.body);
+    
      // Submit To Database
      try {
         const data = await newCategory.save();
