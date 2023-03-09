@@ -9,6 +9,7 @@ const productRouter = require('./routers/productRouter');
 const categoryRouter = require('./routers/categoryRouter');
 const orderRouter = require('./routers/orderRouter');
 const userRouter = require('./routers/userRouter');
+const paymentRouter = require('./routers/PaymentRouter');
 
 // initialize
 const app = express()
@@ -28,6 +29,7 @@ app.use('/products', productRouter);
 app.use('/category', categoryRouter);
 app.use('/orders', orderRouter);
 app.use('/users', userRouter);
+app.use('/payment', paymentRouter);
 
 // default route
 app.get('/', (req, res) => {
