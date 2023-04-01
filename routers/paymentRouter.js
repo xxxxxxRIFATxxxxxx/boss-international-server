@@ -8,6 +8,21 @@ dotenv.config();
 const paymentRouter = express.Router();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
+paymentRouter.get('/', async (req, res) => {
+  try {
+    res.status(200);
+    res.send({
+      result: "Payment Home",
+      message: "Success",
+    });
+  } catch (error) {
+    res.status(error.status || 500);
+    res.send({
+      error: error.message,
+    });
+}
+});
+
 paymentRouter.post('/create-checkout-session', async (req, res) => {
     const line_items = req.body.cart.map((product) => {
         return (
