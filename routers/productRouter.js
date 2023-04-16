@@ -17,7 +17,6 @@ productRouter.get("/", async (req, res) => {
             "-date"
         );
     } else if (req?.query?.title) {
-        // data = await Product.find({ title: req?.query?.title }).sort("-date");
         const allData = (data = await (
             await Product.find({}).sort("-date")
         ).reverse());
