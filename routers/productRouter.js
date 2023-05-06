@@ -17,7 +17,22 @@ productRouter.get("/", async (req, res) => {
             "-date"
         );
     } else if (req?.query?.title) {
-        data = await Product.find({ title: req?.query?.title }).sort("-date");
+        const allData = (data = await (
+            await Product.find({}).sort("-date")
+        ).reverse());
+
+        let newData = [];
+
+        allData.map((product) => {
+            const productTitle = product.title.toLowerCase();
+            const searchTitle = req?.query?.title.toLowerCase();
+
+            if (productTitle.includes(searchTitle)) {
+                newData.push(product);
+            }
+        });
+
+        data = newData;
     } else {
         data = await (await Product.find({}).sort("-date")).reverse();
     }
